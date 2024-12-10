@@ -6,15 +6,20 @@ const session = require('express-session');
 const path = require('path');
 const PackageContent = require('./models/PackageContent'); // Update path as needed
 const authorizeRoles  = require('./routes/accessController');
+
+
+//const multer = require('multer');
+
 require('dotenv').config();
 
+// Initialize Express
 const app = express();
 
-// Middleware
+/* Middleware
 app.use(cors({
     origin: 'http://localhost:5000',
     credentials: true
-}));
+}));*/
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -29,14 +34,17 @@ app.use(session({
 }));
 
 /*---------------------- MongoDB Connection -----------------*/
-// Use environment variable or fallback value
-const mongoURI = process.env.MONGO_URI || 'mongodb+srv://TravellersHubTT:travelershubtravelandtours@databasecluster.9hbza.mongodb.net/THTTDb?retryWrites=true&w=majority&appName=DatabaseCluster';
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://TravellersHubTT:travelershubtravelandtours@databasecluster.9hbza.mongodb.net/THTTDb?retryWrites=true&w=majority&appName=DatabaseCluster', {
+})
+.then(() => console.log("Database Connected"))
+.catch(err => console.error("Database connection error:", err));
 
-mongoose
-  .connect(mongoURI)
-  .then(() => console.log("Database Connected"))
-  .catch(err => console.error("Database connection error:", err));
+// Ensure JWT secret is set
+const jwtSecret = process.env.JWT_SECRET || 'defaultFallbackSecret';
 
+if (!process.env.JWT_SECRET) {
+    console.warn("Warning: JWT_SECRET is not set in the environment variables. Using a fallback secret.");
+}
 
 
 /*------------------ Serve static files --------------------------- */
@@ -45,6 +53,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/userRoutes');
 
 const submitRequirements = require('./routes/submitRequirements'); // Adjust path as needed
+const { env } = require('process');
 
 app.use('/api/requirements', submitRequirements);
 
@@ -52,32 +61,27 @@ app.use('/api/requirements', submitRequirements);
 app.use('/api/auth', authRoutes);
 app.use('/api', userRoutes);
 
-/* Set EJS as the view engine
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views')); // Ensure your EJS files are in the 'views' folder
-app.get('/touristvisa', (req, res) => {
-    res.render('TouristVisa'); // Automatically looks for 'TouristVisa.ejs' in the views folder
-});*/
-
 
 // Serve static files (HTML, CSS, JS, etc.) (NOTE: add app.use for JS or CSS for MIMETYPE)
 app.use( express.static(path.join(__dirname, 'Clientpage')));
+app.use(express.static(path.join(__dirname, 'Homepage')));
+app.use( express.static(path.join(__dirname, 'Adminpage')));
+
+
 app.use('/assets', express.static(path.join(__dirname, 'assets'))); 
-app.use('/client_scripts', express.static(path.join(__dirname, 'client_scripts')));
-app.use('/admin_scripts', express.static(path.join(__dirname, 'admin_scripts')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/admin_scripts', express.static(path.join(__dirname, 'admin_scripts')));
+app.use('/client_scripts', express.static(path.join(__dirname, 'client_scripts')));
 
-/*------------------  Serve static Frontend --------------------------- */
+/*------------------ Client serve static files --------------------------- */
 
-// Serve HOMEPAGE directory statically
-//app.use('/Homepage',express.static(path.join(__dirname, 'Homepage')));
-//app.use('/Clientpage', express.static(path.join(__dirname, 'Clientpage')));
-//app.use('/Adminpage', express.static(path.join(__dirname, 'Adminpage')));
 
 // Serve static pages directly
 app.get('/Homepage', (req, res) => {
     res.sendFile(path.join(__dirname, 'Homepage', 'Homepage.html'));
 });
+
+
 
 app.get('/Clientpage', (req, res) => {
     res.sendFile(path.join(__dirname,'Clientpage', 'Clientpage.html'));
@@ -113,18 +117,9 @@ app.get('/EmailConfirm', (req, res) => {
 
 
 //Login
-//Email Confirmation
 app.get('/Login', (req, res) => {
     res.sendFile(path.join(__dirname, 'Homepage', 'User_SignIn', 'SignIn.html'));
 });
-
-
-// Ensure JWT secret is set
-const jwtSecret = process.env.JWT_SECRET || 'defaultFallbackSecret';
-
-if (!process.env.JWT_SECRET) {
-    console.warn("Warning: JWT_SECRET is not set in the environment variables. Using a fallback secret.");
-}
 
 
 /* ------------------------- Admin serve static files --------------------------- */
