@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <td>${new Date(req.submittedAt).toLocaleDateString()}</td>
                         <td class="text-center">
                             <a href="VisaInformationView.html?uniqueID=${req.uniqueID}" class="btn btn-primary btn-sm" style="background: #08addc;">View</a>
+                            
                         </td>
                     </tr>`;
             });
