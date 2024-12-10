@@ -38,7 +38,7 @@ async function fetchTourDetails() {
         Object.entries(primaryFiles).forEach(([key, elementId]) => {
             const imgElement = document.getElementById(elementId);
             if (tour[key]?.path) {
-                imgElement.src = tour[key].path;
+                imgElement.src = `${window.location.origin}/${tour[key].path}`;
                 imgElement.alt = `${key} file`;
             } else {
                 imgElement.src = '';
