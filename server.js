@@ -75,22 +75,31 @@ app.use('/client_scripts', express.static(path.join(__dirname, 'client_scripts')
 
 /*------------------ Client serve static files --------------------------- */
 
-//Packages
+//Packages 1 Serve
 app.get('/Clientpage/package_1', (req, res) => {
     res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'package_1.html'));
 });
 
+//Packages 2 Serve
 app.get('/Clientpage/package_2', (req, res) => {
     res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'package_2.html'));
 });
 
+//Packages 3 Serve
 app.get('/Clientpage/package_3', (req, res) => {
     res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'package_3.html'));
 });
 
+//Packages 4 Serve
 app.get('/Clientpage/package_4', (req, res) => {
     res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'package_4.html'));
 });
+
+//BookHere Module
+app.get('/BookHere', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'BookHere.html'));
+});
+
 
 // Serve static pages directly
 app.get('/Homepage', (req, res) => {
