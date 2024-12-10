@@ -788,7 +788,7 @@ router.get('/requirements/:uniqueID', async (req, res) => {
         // Adjust paths for serving files as static assets
         const adjustPath = (file) => {
             if (file && file.path) {
-                return { ...file, path: `/uploads/${path.basename(file.path)}` };
+                return { ...file, path: `${path.basename(file.path)}` };
             }
             return null;
         };

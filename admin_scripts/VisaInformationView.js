@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (data[field]?.path) {
                 const imgElement = document.getElementById(id);
                 if (imgElement) {
-                    imgElement.src = `${window.location.origin}${data[field].path}`;
+                    imgElement.src = `${data[field].path}`;
                     imgElement.alt = `${field} file`; // Set an alt attribute for accessibility
                 } else {
                     console.warn(`Element with ID '${id}' not found in the DOM.`);
