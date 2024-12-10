@@ -106,7 +106,9 @@ router.post('/register', async (req, res) => {
         const token = jwt.sign({ email }, jwtSecret, { expiresIn: '1h' });
 
         // Send email with the verification link
-        const verificationLink = `http://localhost:5000/EmailConfirm?token=${token}`;
+        const baseUrl = `${req.protocol}://${req.get('host')}`; // Automatically detects the deployed URL
+        const verificationLink = `${baseUrl}/EmailConfirm?token=${token}`;
+
         await transporter.sendMail({
             from: 'travellershubtravelandtours03@gmail.com',
             to: email,

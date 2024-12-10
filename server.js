@@ -6,13 +6,8 @@ const session = require('express-session');
 const path = require('path');
 const PackageContent = require('./models/PackageContent'); // Update path as needed
 const authorizeRoles  = require('./routes/accessController');
-
-
-//const multer = require('multer');
-
 require('dotenv').config();
 
-// Initialize Express
 const app = express();
 
 // Middleware
@@ -34,10 +29,13 @@ app.use(session({
 }));
 
 /*---------------------- MongoDB Connection -----------------*/
-mongoose.connect('mongodb+srv://TravellersHubTT:travelershubtravelandtours@databasecluster.9hbza.mongodb.net/THTTDb?retryWrites=true&w=majority&appName=DatabaseCluster', {
-})
-.then(() => console.log("Database Connected"))
-.catch(err => console.error("Database connection error:", err));
+// Use environment variable or fallback value
+const mongoURI = process.env.MONGO_URI || 'mongodb+srv://TravellersHubTT:travelershubtravelandtours@databasecluster.9hbza.mongodb.net/THTTDb?retryWrites=true&w=majority&appName=DatabaseCluster';
+
+mongoose
+  .connect(mongoURI)
+  .then(() => console.log("Database Connected"))
+  .catch(err => console.error("Database connection error:", err));
 
 
 
@@ -62,26 +60,24 @@ app.get('/touristvisa', (req, res) => {
 });*/
 
 
-// Serve static files (HTML, CSS, JS, etc.)
+// Serve static files (HTML, CSS, JS, etc.) (NOTE: add app.use for JS or CSS for MIMETYPE)
 app.use( express.static(path.join(__dirname, 'Clientpage')));
 app.use('/assets', express.static(path.join(__dirname, 'assets'))); 
-app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
+app.use('/client_scripts', express.static(path.join(__dirname, 'client_scripts')));
+app.use('/admin_scripts', express.static(path.join(__dirname, 'admin_scripts')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-
-/*------------------ Client serve static files --------------------------- */
+/*------------------  Serve static Frontend --------------------------- */
 
 // Serve HOMEPAGE directory statically
-app.use(express.static(path.join(__dirname, 'Homepage')));
-
-app.use('/Clientpage', express.static(path.join(__dirname, 'Clientpage')));
+//app.use('/Homepage',express.static(path.join(__dirname, 'Homepage')));
+//app.use('/Clientpage', express.static(path.join(__dirname, 'Clientpage')));
+//app.use('/Adminpage', express.static(path.join(__dirname, 'Adminpage')));
 
 // Serve static pages directly
 app.get('/Homepage', (req, res) => {
     res.sendFile(path.join(__dirname, 'Homepage', 'Homepage.html'));
 });
-
-
 
 app.get('/Clientpage', (req, res) => {
     res.sendFile(path.join(__dirname,'Clientpage', 'Clientpage.html'));
@@ -132,13 +128,6 @@ if (!process.env.JWT_SECRET) {
 
 
 /* ------------------------- Admin serve static files --------------------------- */
-// Serve static files
-app.use( express.static(path.join(__dirname, 'Adminpage')));
-app.use('/assets', express.static(path.join(__dirname, 'assets'))); 
-app.use('/client_scripts', express.static(path.join(__dirname, 'client_scripts')));
-app.use('/admin_scripts', express.static(path.join(__dirname, 'admin_scripts')));
-
-
 
 // Configure express-session
 app.use(session({
