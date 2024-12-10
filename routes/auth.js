@@ -213,7 +213,7 @@ router.post('/login', async (req, res) => {
 
             // If packageID exists, redirect to the package-specific page
             if (packageID) {
-                const packagePage = `/Clientpage/TourPackageList/${packageID}.html`;
+                const packagePage = `/Clientpage/${packageID}`;
                 console.log('Redirecting to package-specific page:', packagePage + ' using ' + packageID);
 
                 return res.json({ success: true, redirectTo: packagePage, token });
