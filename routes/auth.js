@@ -418,6 +418,16 @@ router.post('/login-admin', async (req, res) => {
 });
 
 
+router.post('/logout-admin', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).send('Logout failed');
+        }
+        res.status(200).send('Logout successful');
+        console.log("Session is now destroyed. Logged out successfully");
+    });
+});
+
 
 
 // Route to get name and role for display

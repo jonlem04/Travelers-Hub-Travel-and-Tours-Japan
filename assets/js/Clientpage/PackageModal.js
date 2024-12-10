@@ -457,7 +457,7 @@ function addTraveler() {
 /*---------------------- PAYMENT MODAL -----------------------*/
 // Function to send GCash payment email
 function gcashButtonEmail() {
-  fetch('http://localhost:5000/api/auth/session-data-client')
+  fetch('/api/auth/session-data-client')
       .then((response) => {
           if (response.ok) return response.json();
           throw new Error('Unable to fetch session data.');
@@ -485,7 +485,7 @@ function gcashButtonEmail() {
 
 // Function to send Bank payment email
 function bankButtonEmail() {
-  fetch('http://localhost:5000/api/auth/session-data-client')
+  fetch('/api/auth/session-data-client')
       .then((response) => {
           if (response.ok) return response.json();
           throw new Error('Unable to fetch session data.');
@@ -515,7 +515,7 @@ function bankButtonEmail() {
 
 // Helper function to send email
 function sendEmail(to, subject, body) {
-  fetch('http://localhost:5000/api/auth/send-email', {
+  fetch('/api/auth/send-email', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ to, subject, body }),

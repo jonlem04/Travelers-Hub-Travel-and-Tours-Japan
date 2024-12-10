@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
    // Function to fetch session data and update the Profile dropdown
 async function fetchAndDisplaySessionData() {
     try {
-        const response = await fetch('http://localhost:5000/api/auth/session-data-client', {
+        const response = await fetch('/api/auth/session-data-client', {
             method: 'GET',
             credentials: 'include', // Include cookies to access session data
         });
