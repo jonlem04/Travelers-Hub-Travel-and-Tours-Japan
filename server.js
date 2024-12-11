@@ -24,20 +24,19 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-// Session configuration
-app.use(session({
-    secret: 'yourSecretKey', // Use a secure secret key in production
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false  } // Set to true if using HTTPS
-}));
-
 /*---------------------- MongoDB Connection -----------------*/
 mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://TravellersHubTT:travelershubtravelandtours@databasecluster.9hbza.mongodb.net/THTTDb?retryWrites=true&w=majority&appName=DatabaseCluster', {
 })
 .then(() => console.log("Database Connected"))
 .catch(err => console.error("Database connection error:", err));
+
+// Configure express-session
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'yoursecretkey',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }  // Set `true` if using HTTPS
+}));
 
 // Ensure JWT secret is set
 const jwtSecret = process.env.JWT_SECRET || 'defaultFallbackSecret';
@@ -73,8 +72,11 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/admin_scripts', express.static(path.join(__dirname, 'admin_scripts')));
 app.use('/client_scripts', express.static(path.join(__dirname, 'client_scripts')));
 
+
 /*------------------ Client serve static files --------------------------- */
 
+
+/*------------------ Packages ------------------*/
 //Packages 1 Serve
 app.get('/Clientpage/package_1', (req, res) => {
     res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'package_1.html'));
@@ -96,17 +98,23 @@ app.get('/Clientpage/package_4', (req, res) => {
 });
 
 //BookHere Module
-app.get('/Clientpage/BookHere', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'BookHere.html'));
+app.get('/BookHere', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'bookHere.html'));
 });
 
 
+
+/*------------------ Homepage/Clientpage ------------------*/
+
+// Root route to serve Homepage.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Homepage', 'Homepage.html'));
+});
 
 // Serve static pages directly
 app.get('/Homepage', (req, res) => {
     res.sendFile(path.join(__dirname, 'Homepage', 'Homepage.html'));
 });
-
 
 
 app.get('/Clientpage', (req, res) => {
@@ -126,11 +134,6 @@ app.get('/help_support', (req, res) => {
 });
 
 
-// Root route to serve Homepage.html
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Homepage', 'Homepage.html'));
-});
-
 //Email Verification
 app.get('/EmailVerify', (req, res) => {
     res.sendFile(path.join(__dirname, 'Homepage', 'Emailverification', 'EmailVerification.html'));
@@ -147,16 +150,6 @@ app.get('/Login', (req, res) => {
     res.sendFile(path.join(__dirname, 'Homepage', 'User_SignIn', 'SignIn.html'));
 });
 
-
-/* ------------------------- Admin serve static files --------------------------- */
-
-// Configure express-session
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'yoursecretkey',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }  // Set `true` if using HTTPS
-}));
 
 
 /*------------------ Admin Roles serve static files --------------------------- */
