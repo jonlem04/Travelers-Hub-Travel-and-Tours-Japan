@@ -96,7 +96,7 @@ app.get('/Clientpage/package_4', (req, res) => {
 });
 
 //BookHere Module
-app.get('/BookHere', (req, res) => {
+app.get('/Clientpage/BookHere', (req, res) => {
     res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'BookHere.html'));
 });
 
