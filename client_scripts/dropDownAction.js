@@ -1,6 +1,6 @@
 document.getElementById("logout-button").addEventListener("click", async () => {
     try {
-        const response = await fetch('/api/auth/logout', {
+        const response = await fetch('/api/auth/logout-client', {
             method: 'POST',
             credentials: 'include', // Ensure cookies are sent with the request
         });

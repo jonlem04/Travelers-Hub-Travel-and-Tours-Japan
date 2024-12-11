@@ -10,7 +10,7 @@ $(document).ready(function () {
         },
         error: function () {
             // Redirect to login if session is invalid
-            window.location.href = 'AdminLogin.html';
+            window.location.href = '/AdminLogin';
         }
     });
 

@@ -7,19 +7,11 @@ const path = require('path');
 const PackageContent = require('./models/PackageContent'); // Update path as needed
 const authorizeRoles  = require('./routes/accessController');
 
-
-//const multer = require('multer');
-
 require('dotenv').config();
 
-// Initialize Express
 const app = express();
 
-/* Middleware
-app.use(cors({
-    origin: 'http://localhost:5000',
-    credentials: true
-}));*/
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -61,9 +53,23 @@ app.use('/api/auth', authRoutes);
 app.use('/api', userRoutes);
 
 
+/*---------------------------- Restricting Clientpages (Enforcing users to login to create token) -------------------------- */
+
+// Middleware to check if the user is logged in
+function isAuthenticated(req, res, next) {
+    if (req.session && req.session.client) {
+        return next(); // User is logged in, proceed to the next middleware/route
+    }
+    res.redirect('/AccessDenied'); // Redirect to Access Denied if not logged in
+}
+
+// Apply the middleware to restrict access to Clientpage and Homepage
+app.use('/Clientpage', isAuthenticated, express.static(path.join(__dirname, 'Clientpage')));
+
+
 // Serve static files (HTML) (NOTE: add app.use for JS or CSS for MIMETYPE)
-app.use( express.static(path.join(__dirname, 'Clientpage')));
-app.use(express.static(path.join(__dirname, 'Homepage')));
+//app.use( express.static(path.join(__dirname, 'Clientpage')));
+app.use( express.static(path.join(__dirname, 'Homepage')));
 app.use( express.static(path.join(__dirname, 'Adminpage')));
 
 // Serve static files ( CSS, JS, etc.) (NOTE: add app.use for JS or CSS for MIMETYPE)
@@ -74,34 +80,31 @@ app.use('/client_scripts', express.static(path.join(__dirname, 'client_scripts')
 
 
 /*------------------ Client serve static files --------------------------- */
-
-
 /*------------------ Packages ------------------*/
 //Packages 1 Serve
-app.get('/Clientpage/package_1', (req, res) => {
+app.get('/Clientpage/package_1', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'package_1.html'));
 });
 
 //Packages 2 Serve
-app.get('/Clientpage/package_2', (req, res) => {
+app.get('/Clientpage/package_2', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'package_2.html'));
 });
 
 //Packages 3 Serve
-app.get('/Clientpage/package_3', (req, res) => {
+app.get('/Clientpage/package_3', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'package_3.html'));
 });
 
 //Packages 4 Serve
-app.get('/Clientpage/package_4', (req, res) => {
+app.get('/Clientpage/package_4', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'package_4.html'));
 });
 
 //BookHere Module
-app.get('/BookHere', (req, res) => {
+app.get('/BookHere', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'bookHere.html'));
 });
-
 
 
 /*------------------ Homepage/Clientpage ------------------*/
@@ -117,7 +120,7 @@ app.get('/Homepage', (req, res) => {
 });
 
 
-app.get('/Clientpage', (req, res) => {
+app.get('/Clientpage', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname,'Clientpage', 'Clientpage.html'));
 });
 

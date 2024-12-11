@@ -233,15 +233,13 @@ router.post('/login', async (req, res) => {
 
 
 // Logout Route
-router.post('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error("Session destruction error:", err);
-            return res.status(500).send("Unable to log out");
-        }
-        console.log("session is now destroyed")
-        res.status(200).send("Logged out successfully");
-    });
+router.post('/logout-client', (req, res) => {
+    if (req.session.client) {
+        delete req.session.client; // Clear client-specific data
+        res.json({ success: true, msg: 'Client logged out successfully' });
+    } else {
+        res.status(400).json({ success: false, msg: 'No client session to log out' });
+    }
 });
 
 
@@ -312,43 +310,6 @@ router.post('/update-user-data', (req, res) => {
 
 
 /*------------------------------------- Admin Routes ------------------------------------------------*/
-
-/*
-// Middleware for Role-Based Access Control
-function authorizeRoles(...roles) {
-    return (req, res, next) => {
-        const token = req.headers.authorization.split(' ')[1];
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        if (!roles.includes(decoded.role)) {
-            return res.status(403).json({ message: 'Access denied' });
-        }
-        req.admin = decoded;
-        next();
-    };
-}*/
-/*
-// Middleware for Role-Based Access Control
-function authorizeRoles(...roles) {
-    return (req, res, next) => {
-        if (!req.headers.authorization) {
-            return res.status(403).json({ message: 'Access denied' });
-        }
-        const token = req.headers.authorization.split(' ')[1];
-        try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            if (!roles.includes(decoded.role)) {
-                return res.status(403).json({ message: 'Access denied' });
-            }
-            req.admin = decoded;
-            next();
-        } catch (error) {
-            return res.status(401).json({ message: 'Invalid token' });
-        }
-    };
-}*/
-
-
-
 // Remove one of the two /create-admin routes to avoid duplication
 router.post('/create-admin', async (req, res) => {
     const { name, email, contactNumber, password, selectRole } = req.body;
@@ -421,13 +382,12 @@ router.post('/login-admin', async (req, res) => {
 
 
 router.post('/logout-admin', (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            return res.status(500).send('Logout failed');
-        }
-        res.status(200).send('Logout successful');
-        console.log("Session is now destroyed. Logged out successfully");
-    });
+    if (req.session.admin) {
+        delete req.session.admin; // Clear admin-specific data
+        res.json({ success: true, msg: 'Admin logged out successfully' });
+    } else {
+        res.status(400).json({ success: false, msg: 'No admin session to log out' });
+    }
 });
 
 
