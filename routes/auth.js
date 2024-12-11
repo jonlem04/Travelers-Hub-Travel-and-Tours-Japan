@@ -788,7 +788,7 @@ router.get('/requirements/:uniqueID', async (req, res) => {
         // Adjust paths for serving files as static assets
         const adjustPath = (file) => {
             if (file && file.path) {
-                return { ...file, path: `${path.basename(file.path)}` };
+                return { ...file, path: `uploads/${path.basename(file.path)}` };
             }
             return null;
         };
@@ -802,8 +802,10 @@ router.get('/requirements/:uniqueID', async (req, res) => {
         requirement.personalBankCertificateFile = adjustPath(requirement.personalBankCertificateFile);
         requirement.taxPaymentCertificateFile = adjustPath(requirement.taxPaymentCertificateFile);
         requirement.employmentCertificateFile = adjustPath(requirement.employmentCertificateFile);
-
+        
         res.json(requirement);
+
+        console.log('Fetching requirement', requirement);
     } catch (err) {
         console.error('Error fetching requirement:', err);
         res.status(500).json({ error: err.message });
@@ -1184,6 +1186,9 @@ router.get('/groupTours/details', async (req, res) => {
         const tour = await GroupTour.findOne({ clientID }).populate('additionalTravellers');
         if (!tour) return res.status(404).json({ error: 'Tour not found' });
         res.json(tour);
+
+        console.log('Fetched tour details:', tour);
+
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch tour' });
     }

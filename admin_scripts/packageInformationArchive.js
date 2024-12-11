@@ -18,12 +18,7 @@ async function fetchArchivedTours(statusFilter = 'Declined') {
             <td>${tour.groupTourName || '-'}</td>
             <td>${tour.leadName || '-'}</td>
             <td>${tour.status || '-'}</td>
-            <td>
-                <div class="d-flex justify-content-center align-items-center align-content-center">
-                    <a class="btn btn-primary btn-sm" style="background: #08addc; margin-right: 7px;" 
-                       href="PackageInformationView.html?email=${tour.clientID}">View</a>
-                </div>
-            </td>
+            <td><a href="PackageInformationView.html?clientID=${tour.clientID}" class="btn btn-primary btn-sm" style="background: #08addc;">View</a></td>
         `;
         tableBody.appendChild(row);
     });
