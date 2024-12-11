@@ -42,9 +42,7 @@ if (!process.env.JWT_SECRET) {
 // Other imports
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/userRoutes');
-
 const submitRequirements = require('./routes/submitRequirements'); // Adjust path as needed
-const { env } = require('process');
 
 app.use('/api/requirements', submitRequirements);
 
@@ -62,15 +60,13 @@ function isAuthenticated(req, res, next) {
     }
     res.redirect('/AccessDenied'); // Redirect to Access Denied if not logged in
 }
-
-// Apply the middleware to restrict access to Clientpage and Homepage
-app.use('/Clientpage', isAuthenticated, express.static(path.join(__dirname, 'Clientpage')));
-
-
 // Serve static files (HTML) (NOTE: add app.use for JS or CSS for MIMETYPE)
 //app.use( express.static(path.join(__dirname, 'Clientpage')));
 app.use( express.static(path.join(__dirname, 'Homepage')));
 app.use( express.static(path.join(__dirname, 'Adminpage')));
+app.use( express.static(path.join(__dirname, 'Clientpage')));
+
+
 
 // Serve static files ( CSS, JS, etc.) (NOTE: add app.use for JS or CSS for MIMETYPE)
 app.use('/assets', express.static(path.join(__dirname, 'assets'))); 
@@ -79,7 +75,14 @@ app.use('/admin_scripts', express.static(path.join(__dirname, 'admin_scripts')))
 app.use('/client_scripts', express.static(path.join(__dirname, 'client_scripts')));
 
 
-/*------------------ Client serve static files --------------------------- */
+/*------------------ Client serve static files --------------------------- 
+app.use('/aboutUs', isAuthenticated, express.static(path.join(__dirname, 'Clientpage', 'aboutUs')));
+app.use('/helpSupport',isAuthenticated, express.static(path.join(__dirname, 'Clientpage', 'helpSupport')));
+app.use('/japan',isAuthenticated, express.static(path.join(__dirname, 'Clientpage', 'japan')));
+app.use('/profile',isAuthenticated, express.static(path.join(__dirname, 'Clientpage', 'profile')));
+app.use('/TourPackageList',isAuthenticated, express.static(path.join(__dirname, 'Clientpage', 'TourPackageList')));
+*/
+
 /*------------------ Packages ------------------*/
 //Packages 1 Serve
 app.get('/Clientpage/package_1', isAuthenticated, (req, res) => {
@@ -105,6 +108,8 @@ app.get('/Clientpage/package_4', isAuthenticated, (req, res) => {
 app.get('/BookHere', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'bookHere.html'));
 });
+
+
 
 
 /*------------------ Homepage/Clientpage ------------------*/
