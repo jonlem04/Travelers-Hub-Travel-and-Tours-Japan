@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
         });
+        
     } catch (err) {
         console.error('Error fetching requirement:', err);
     }

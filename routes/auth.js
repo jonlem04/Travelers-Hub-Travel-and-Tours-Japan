@@ -788,13 +788,12 @@ router.get('/requirements/:uniqueID', async (req, res) => {
         // Adjust paths for serving files as static assets
         const adjustPath = (file) => {
             if (file && file.path) {
-                // Avoid duplicating "uploads/" in the path
-                const adjustedPath = file.path.startsWith('uploads/') ? file.path : `uploads/${path.basename(file.path)}`;
-                return { ...file, path: adjustedPath };
+                // Normalize backslashes to forward slashes
+                const normalizedPath = file.path.replace(/\\/g, '/');
+                return { ...file, path: `uploads/${path.basename(normalizedPath)}` };
             }
             return null;
         };
-        
 
         requirement.passportFile = adjustPath(requirement.passportFile);
         requirement.visaApplicationFile = adjustPath(requirement.visaApplicationFile);
@@ -805,15 +804,18 @@ router.get('/requirements/:uniqueID', async (req, res) => {
         requirement.personalBankCertificateFile = adjustPath(requirement.personalBankCertificateFile);
         requirement.taxPaymentCertificateFile = adjustPath(requirement.taxPaymentCertificateFile);
         requirement.employmentCertificateFile = adjustPath(requirement.employmentCertificateFile);
-        
+
         res.json(requirement);
 
-        console.log('Fetching requirement', requirement);
+        console.log('Fetching requirement:', requirement);
     } catch (err) {
         console.error('Error fetching requirement:', err);
         res.status(500).json({ error: err.message });
     }
 });
+
+
+
 
 // Archive a requirement
 router.post('/requirements/archive', async (req, res) => {
@@ -1188,14 +1190,47 @@ router.get('/groupTours/details', async (req, res) => {
     try {
         const tour = await GroupTour.findOne({ clientID }).populate('additionalTravellers');
         if (!tour) return res.status(404).json({ error: 'Tour not found' });
+
+        // Normalize paths for the main traveler files
+        const adjustPath = (file) => {
+            if (file && file.path) {
+                // Normalize backslashes to forward slashes
+                const normalizedPath = file.path.replace(/\\/g, '/');
+                return { ...file, path: `uploads/${path.basename(normalizedPath)}` };
+            }
+            return null;
+        };
+
+        tour.paymentReceipt = adjustPath(tour.paymentReceipt);
+        tour.passportID = adjustPath(tour.passportID);
+        tour.visaID = adjustPath(tour.visaID);
+        tour.validID = adjustPath(tour.validID);
+        tour.birthCertificate = adjustPath(tour.birthCertificate);
+        tour.picture = adjustPath(tour.picture);
+
+        // Normalize paths for additional travelers
+        if (tour.additionalTravellers?.length) {
+            tour.additionalTravellers = tour.additionalTravellers.map((traveler) => {
+                return {
+                    ...traveler,
+                    passportID: adjustPath(traveler.passportID),
+                    visaID: adjustPath(traveler.visaID),
+                    validID: adjustPath(traveler.validID),
+                    birthCertificate: adjustPath(traveler.birthCertificate),
+                    picture: adjustPath(traveler.picture),
+                };
+            });
+        }
+
         res.json(tour);
 
         console.log('Fetched tour details:', tour);
-
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch tour' });
     }
 });
+
+
 
 // Fetch all data with statuses Declined and Archived
 router.get('/groupTours/archive', async (req, res) => {
