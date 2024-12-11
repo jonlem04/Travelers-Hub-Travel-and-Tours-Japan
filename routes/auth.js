@@ -788,10 +788,13 @@ router.get('/requirements/:uniqueID', async (req, res) => {
         // Adjust paths for serving files as static assets
         const adjustPath = (file) => {
             if (file && file.path) {
-                return { ...file, path: `uploads/${path.basename(file.path)}` };
+                // Avoid duplicating "uploads/" in the path
+                const adjustedPath = file.path.startsWith('uploads/') ? file.path : `uploads/${path.basename(file.path)}`;
+                return { ...file, path: adjustedPath };
             }
             return null;
         };
+        
 
         requirement.passportFile = adjustPath(requirement.passportFile);
         requirement.visaApplicationFile = adjustPath(requirement.visaApplicationFile);
