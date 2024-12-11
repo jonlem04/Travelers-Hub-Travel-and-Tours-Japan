@@ -62,12 +62,12 @@ app.use('/api/auth', authRoutes);
 app.use('/api', userRoutes);
 
 
-// Serve static files (HTML, CSS, JS, etc.) (NOTE: add app.use for JS or CSS for MIMETYPE)
+// Serve static files (HTML) (NOTE: add app.use for JS or CSS for MIMETYPE)
 app.use( express.static(path.join(__dirname, 'Clientpage')));
 app.use(express.static(path.join(__dirname, 'Homepage')));
 app.use( express.static(path.join(__dirname, 'Adminpage')));
 
-
+// Serve static files ( CSS, JS, etc.) (NOTE: add app.use for JS or CSS for MIMETYPE)
 app.use('/assets', express.static(path.join(__dirname, 'assets'))); 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/admin_scripts', express.static(path.join(__dirname, 'admin_scripts')));
@@ -99,6 +99,7 @@ app.get('/Clientpage/package_4', (req, res) => {
 app.get('/BookHere', (req, res) => {
     res.sendFile(path.join(__dirname, 'Clientpage', 'TourPackageList' , 'BookHere.html'));
 });
+
 
 
 // Serve static pages directly
