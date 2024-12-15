@@ -1246,7 +1246,7 @@ router.get('/groupTours/details', async (req, res) => {
             if (file && file.path) {
                 // Normalize backslashes to forward slashes
                 const normalizedPath = file.path.replace(/\\/g, '/');
-                return { ...file, path: `uploads/${path.basename(normalizedPath)}` };
+                return { ...file, path: `/uploads/${path.basename(normalizedPath)}` };
             }
             return null;
         };
