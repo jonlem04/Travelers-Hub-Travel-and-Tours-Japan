@@ -128,10 +128,10 @@
                                       </div>
                                     </div>
 
-                                    <!-- Date From  -->
+                                    <!-- Date From -->
                                     <div class="row mb-4">
                                       <label class="col-4 fs-5" for="date_from">Date From<span class="text-danger">*</span></label>
-                                      <div class="col-8 ">
+                                      <div class="col-8">
                                         <input type="date" id="dateFrom" name="dateFrom" required class="form-control" style="text-align: justify; width: 50%;">
                                       </div>
                                     </div>
@@ -552,141 +552,17 @@ document.addEventListener("DOMContentLoaded", function () {
     uploadContent.style.display = "block";
     filePreview.style.display = "none";
   }
- 
+     </script>
 
+<script>
+  /* Script for Calendar*/
+  // Get today's date in 'YYYY-MM-DD' format
+  const today = new Date().toISOString().split('T')[0];
 
-      /* FUNCTION OF ADDITIONAL TRAVELLERS 
-      document.addEventListener("DOMContentLoaded", function () {
-        const addTravelerButton = document.getElementById("addTravelerButton");
-        const additionalTravelersContainer = document.getElementById("additionalTravelersContainer");
-        let travelerCount = 1;
-
-        addTravelerButton.addEventListener("click", function () {
-          travelerCount++;
-
-          // Clone the first traveler section
-          const firstTraveler = document.querySelector(".additional-traveler-item");
-          const newTraveler = firstTraveler.cloneNode(true);
-
-          // Update the remove button label
-          newTraveler.querySelector(".remove-item").innerText = `✖ Traveler ${travelerCount}`;
-
-          // Update input IDs, reset values, and ensure unique IDs for cloned elements
-          const inputs = newTraveler.querySelectorAll("input");
-          inputs.forEach((input) => {
-            const originalId = input.id.replace(/[0-9]+$/, ""); // Strip numeric suffix if present
-            input.id = `${originalId}${travelerCount}`;
-            input.name = `${originalId}${travelerCount}`;
-            input.value = ""; // Reset the input value
-          });
-
-          // Update upload content and preview areas
-          const uploadAreas = newTraveler.querySelectorAll(".upload-area");
-          uploadAreas.forEach((uploadArea) => {
-            const fileInput = uploadArea.querySelector("input[type='file']");
-            const uploadContent = uploadArea.querySelector("div:first-child");
-            const filePreview = uploadArea.querySelector("div:nth-child(2)");
-
-            // Ensure IDs are unique and reset states
-            const originalId = fileInput.id.replace(/[0-9]+$/, "");
-            fileInput.id = `${originalId}${travelerCount}`;
-            uploadContent.id = `${originalId}UploadContent${travelerCount}`;
-            filePreview.id = `${originalId}FilePreview${travelerCount}`;
-            filePreview.style.display = "none"; // Hide preview area initially
-            filePreview.innerHTML = ""; // Clear preview content
-            uploadContent.style.display = "block"; // Show upload instructions
-
-            // Attach event listener to handle file uploads
-            fileInput.addEventListener("change", function () {
-              validateAndDisplayFilePreview(fileInput, fileInput.id);
-            });
-          });
-
-          // Add functionality for the remove button
-          newTraveler.querySelector(".remove-item").addEventListener("click", function () {
-            additionalTravelersContainer.removeChild(newTraveler);
-            travelerCount--;
-          });
-
-          // Append the new traveler section to the container
-          additionalTravelersContainer.appendChild(newTraveler);
-        });
-      });
-
-    // Function to validate and display file preview
-    function validateAndDisplayFilePreview(input, id) {
-      const filePreview = document.getElementById(`${id}FilePreview`);
-      const uploadContent = document.getElementById(`${id}UploadContent`);
-
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function () {
-          filePreview.style.display = "block";
-          filePreview.innerHTML = `
-            <p style="margin: 0; font-size: 12px; font-weight: bold;">File uploaded: ${input.files[0].name}</p>
-          `;
-          uploadContent.style.display = "";
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-
-    // Function to reset file upload
-    function resetUpload(id) {
-      const fileInput = document.getElementById(id);
-      const filePreview = document.getElementById(`${id}FilePreview`);
-      const uploadContent = document.getElementById(`${id}UploadContent`);
-
-      fileInput.value = "";
-      filePreview.style.display = "none";
-      filePreview.innerHTML = ""; // Clear preview content
-      uploadContent.style.display = "block";
-    }
-
-    //Original code above
-
-      /* // FUNCTION OF REQUIRED FIELDS
-        function validateForm() {
-      // Get all input fields within the form container
-      const inputs = document.querySelectorAll('.form-container input[required], .form-container textarea[required]');
-      let allFilled = true;
-      
-      // Loop through each required field to check if it has a value
-      inputs.forEach(input => {
-        if (!input.value.trim()) {
-          input.classList.add('is-invalid');  // Optional: highlight missing fields
-          allFilled = false;
-        } else {
-          input.classList.remove('is-invalid');
-        }
-      });
-
-      if (allFilled) {
-        nextStep(2);  // If all fields are filled, proceed to the next step
-      } else {
-        alert('Please fill in all required fields before proceeding.');
-      }
-    } */
-
-      /*// PAYMENT FORM 
-        document.querySelector('.upload-area').addEventListener('click', function() {
-            document.getElementById('paymentReceipt').click();
-        });
-
-        function validateFileSize() {
-        const fileInput = document.getElementById('paymentReceipt');
-        const file = fileInput.files[0];
-        const errorMessage = document.getElementById('fileErrorMessage');
-
-        if (file && file.size > 1048576) { // 1MB = 1048576 bytes
-            errorMessage.style.display = 'inline';
-            fileInput.value = ''; // Clear the input field
-        } else {
-            errorMessage.style.display = 'none';
-        }
-    }  */
-
-      </script>
+  // Set the min attribute for both date inputs
+  document.getElementById('dateFrom').setAttribute('min', today);
+  document.getElementById('dateTo').setAttribute('min', today);
+</script>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 

@@ -827,6 +827,96 @@ router.post('/requirements/decline', async (req, res) => {
     }
 });
 
+//Sending Original Documents
+router.post('/requirements/send-document', async (req, res) => {
+    const { uniqueID } = req.body;
+
+    try {
+        const requirement = await Requirements.findOne({ uniqueID });
+        if (!requirement) return res.status(404).json({ message: 'Requirement not found' });
+
+        // Update field
+        requirement.sendOriginalDocuments = true;
+        await requirement.save();
+
+        // Send email
+        await transporter.sendMail({
+            from: 'travellershubtravelandtours03@gmail.com',
+            to: requirement.email,
+            subject: 'Send Original Documents',
+            text: `Dear ${requirement.name},\n\nYou may now send your original documents to the Travellers Hub Travel and Tours Office.\n\nBest regards,\nTravellers Hub Travel and Tours`,
+        });
+
+        res.json({ message: 'Send Document email sent' });
+        console.log('Send Document email sent to', requirement.email);
+
+    } catch (err) {
+        console.error('Error in sending document email:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+// Document Submitted
+router.post('/requirements/document-submitted', async (req, res) => {
+    const { uniqueID } = req.body;
+
+    try {
+        const requirement = await Requirements.findOne({ uniqueID });
+        if (!requirement) return res.status(404).json({ message: 'Requirement not found' });
+
+        // Update field
+        requirement.documentSubmitted = true;
+        await requirement.save();
+
+        // Send email
+        await transporter.sendMail({
+            from: 'travellershubtravelandtours03@gmail.com',
+            to: requirement.email,
+            subject: 'Document Submitted to Embassy',
+            text: `Dear ${requirement.name},\n\nYour documents have been submitted to the embassy. Please wait for further updates via email.\n\nBest regards,\nTravellers Hub Travel and Tours`,
+        });
+
+        res.json({ message: 'Document Submitted email sent' });
+        console.log('Document Submitted email sent to', requirement.email);
+
+    } catch (err) {
+        console.error('Error in submitting document email:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+
+// Passport Received
+router.post('/requirements/passport-received', async (req, res) => {
+    const { uniqueID } = req.body;
+
+    try {
+        const requirement = await Requirements.findOne({ uniqueID });
+        if (!requirement) return res.status(404).json({ message: 'Requirement not found' });
+
+        // Update field
+        requirement.passportRecieved = true;
+        await requirement.save();
+
+        // Send email
+        await transporter.sendMail({
+            from: 'travellershubtravelandtours03@gmail.com',
+            to: requirement.email,
+            subject: 'Passport Received',
+            text: `Dear ${requirement.name},\n\nYour passport has been received and is ready for pickup at the Travellers Hub Travel and Tours office, or it can be delivered to your address.\n\nBest regards,\nTravellers Hub Travel and Tours`,
+        });
+
+        res.json({ message: 'Passport Received email sent'});
+        console.log('Passport Received email sent to', requirement.email);
+    } catch (err) {
+        console.error('Error in receiving passport email:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
 
 
 /* ---------------------------------------------- Package Routes for Homepage ----------------------------------------------- */
@@ -1091,7 +1181,7 @@ router.get('/package-content-list', async (req, res) => {
 
 
 /*-------------------------------------    Package Booking Routes Table Display    -------------------------------------*/
-// Fetch all data with statuses Pending and Accepted
+// Fetch tours with "Pending" or "Accepted" statuses
 router.get('/groupTours', async (req, res) => {
     try {
         const tours = await GroupTour.find({ status: { $in: ['Pending', 'Accepted'] } });
@@ -1118,11 +1208,9 @@ router.put('/groupTours/status', async (req, res) => {
             if (status === 'Accepted') {
                 subject = 'Booking Request Accepted';
                 text = `Dear ${tour.leadName},\n\nYour booking request has been accepted. Please wait for further processing.\n\nBest regards,\nTravellers Hub Travel and Tours`;
-                console.log(`Booking request accepted, Email sent to ${tour.email}`);
             } else if (status === 'Declined') {
                 subject = 'Booking Request Declined';
-                text = `Dear ${tour.leadName},\n\nWe regret to inform you that your booking request submission has been declined. Please review the submission requirements and try again.\n\nBest regards,\nTravellers Hub Travel and Tours`;
-                console.log(`Booking request declined, Email sent to ${tour.email}`);
+                text = `Dear ${tour.leadName},\n\nWe regret to inform you that your booking request has been declined. Please review the submission requirements and try again.\n\nBest regards,\nTravellers Hub Travel and Tours`;
             }
 
             if (['Accepted', 'Declined'].includes(status)) {
@@ -1135,6 +1223,7 @@ router.put('/groupTours/status', async (req, res) => {
             }
 
             res.json({ message: `Status updated to ${status}` });
+            console.log('Status updated to ', status, ' and email notification sent to ', tour.email);
         } else {
             res.status(400).json({ error: 'Invalid status' });
         }
@@ -1142,6 +1231,7 @@ router.put('/groupTours/status', async (req, res) => {
         res.status(500).json({ error: 'Failed to update status' });
     }
 });
+
 
 // Fetch a single tour by clientID
 router.get('/groupTours/details', async (req, res) => {
@@ -1199,6 +1289,112 @@ router.get('/groupTours/archive', async (req, res) => {
         res.json(tours);
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch archived tours' });
+    }
+});
+
+
+// Send document notification
+router.put('/groupTours/send-document', async (req, res) => {
+    const { clientID } = req.body;
+
+    try {
+        const tour = await GroupTour.findOne({ clientID });
+        if (!tour) return res.status(404).json({ error: 'Tour not found' });
+
+        tour.sendOriginalDocuments = true;
+        await tour.save();
+
+        await transporter.sendMail({
+            from: 'travellershubtravelandtours03@gmail.com',
+            to: tour.email,
+            subject: 'Send Original Documents',
+            text: `Dear ${tour.leadName},\n\nPlease send your original documents for further processing.\n\nBest regards,\nTravellers Hub Travel and Tours`,
+        });
+
+        res.json({ message: 'Document submission email sent' });
+        console.log('Document submission email sent to ', tour.email);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to send email for sending original documents' });
+    }
+});
+
+// Document submitted notification
+router.put('/groupTours/document-submitted', async (req, res) => {
+    const { clientID } = req.body;
+
+    try {
+        const tour = await GroupTour.findOne({ clientID });
+        if (!tour) return res.status(404).json({ error: 'Tour not found' });
+
+        tour.documentSubmitted = true;
+        await tour.save();
+
+        await transporter.sendMail({
+            from: 'travellershubtravelandtours03@gmail.com',
+            to: tour.email,
+            subject: 'Document Submitted to Embassy',
+            text: `Dear ${tour.leadName},\n\nYour documents have been submitted to the embassy. Please wait for further updates.\n\nBest regards,\nTravellers Hub Travel and Tours`,
+        });
+
+        res.json({ message: 'Documment Submitted email sent' });
+        console.log('Documment Submitted email sent to ', tour.email);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to send email for document submission' });
+    }
+});
+
+// Passport received notification
+router.put('/groupTours/passport-received', async (req, res) => {
+    const { clientID } = req.body;
+
+    try {
+        const tour = await GroupTour.findOne({ clientID });
+        if (!tour) return res.status(404).json({ error: 'Tour not found' });
+
+        tour.passportRecieved = true;
+        await tour.save();
+
+        await transporter.sendMail({
+            from: 'travellershubtravelandtours03@gmail.com',
+            to: tour.email,
+            subject: 'Passport Ready for Pickup',
+            text: `Dear ${tour.leadName},\n\nYour passport is ready for pickup. Please visit our office to collect it.\n\nBest regards,\nTravellers Hub Travel and Tours`,
+        });
+
+        res.json({ message: 'Passport Recieved email sent' });
+        console.log('Passport Recieved email sent to', requirement.email);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to send email for passport readiness' });
+    }
+});
+
+// Update paymentAcknowledged field and send email notification
+router.put('/groupTours/payment-acknowledged', async (req, res) => {
+    const { clientID } = req.body;
+
+    try {
+        const tour = await GroupTour.findOne({ clientID });
+        if (!tour) return res.status(404).json({ error: 'Tour not found' });
+
+        tour.paymentAcknowledged = true;
+        await tour.save();
+
+        // Send email notification
+        const subject = 'Payment Receipt Acknowledged';
+        const text = `Dear ${tour.leadName},\n\nYour payment receipt has been fully acknowledged and your booking process is now complete.\n\nBest regards,\nTravellers Hub Travel and Tours`;
+
+        await transporter.sendMail({
+            from: 'travellershubtravelandtours03@gmail.com',
+            to: tour.email,
+            subject,
+            text,
+        });
+
+        res.json({ message: 'Payment acknowledged email sent.' });
+        console.log('Payment acknowledged email sent to', requirement.email);
+
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to acknowledge payment' });
     }
 });
 

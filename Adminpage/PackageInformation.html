@@ -103,14 +103,14 @@
                             </select>
                     </div>
 
-                        <div class="card-body">
-                            <div class="table-responsive table mt-2" id="ToursTable" role="grid" aria-describedby="dataTable_info">
+                        <div class="card-body"  style="min-height: 500px; height: 700px;">
+                            <div class="table-responsive table mt-2" id="ToursTable" role="grid" aria-describedby="dataTable_info" style="min-height: 300px; overflow-y: hidden;">
                                 <table class="table my-0" id="dataTable">
                                     <thead>
                                         <tr>
                                             <th>Action</th>
                                             <th>Name</th>
-                                            <th>email</th>
+                                           <!-- <th>email</th> -->
                                             <th>Package Name</th>
                                             <th>Group Tour Name</th>
                                             <th>Status</th>
@@ -118,21 +118,17 @@
                                         </tr>
                                     </thead>
                                     <tbody id="packageTableBody">
-                                        <tr>
-                                            <td>
-                                                <div style="max-width: 200px;">
-                                                    <div class="btn-group" role="group"><button class="btn btn-primary btn-sm" id="AcceptButton" type="button" style="background: #3ba639;">Accept</button><button class="btn btn-danger btn-sm" id="DeclineButton" type="button" style="background: #e13333;">Decline</button></div><button class="btn btn-danger btn-sm" id="ArchiveButton" type="button">Archive</button>
-                                                </div>
+                                        <!--<tr>
+                                            <td>                                               
                                             </td>
                                             <td><span id="fullName">-</span></td>
-                                            <td><span id="email">-</span></td>
+                                            <td><span id="email">-</span></td> 
                                             <td><span id="packageName">-</span></td>
                                             <td><span id="groupTourName">-</span></td>
                                             <td><span id="status">-</span></td>
-                                            <td class="d-flex justify-content-center align-items-center align-content-center">
-                                                <div><a class="btn btn-primary btn-sm" role="button" id="ViewButton" style="background: #08addc;margin-right: 7px;" href="PackageInformationView.html">&nbsp;View</a></div>
+                                            <td class="d-flex justify-content-center align-items-center align-content-center">                                               
                                             </td>
-                                        </tr>
+                                        </tr> -->
                                     </tbody>
                                 </table>
                             </div>

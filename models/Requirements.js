@@ -63,6 +63,10 @@ const RequirementsSchema = new mongoose.Schema({
         enum: ['Accepted', 'Declined', 'Archived', 'Pending'], 
         default: 'Pending' 
     },
+    sendOriginalDocuments : { type: Boolean, default: false }, //Added field
+    documentSubmitted : { type: Boolean, default: false }, //Added field
+    passportRecieved : { type: Boolean, default: false }, //Added field 
+    
     submittedAt: {
         type: Date,
         default: Date.now,

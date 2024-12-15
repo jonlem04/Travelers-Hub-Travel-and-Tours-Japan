@@ -475,6 +475,8 @@
             document.getElementById("termsModal").style.display = "none";
         }
 
+
+        
         // Enable the Proceed button only when the terms are accepted
         function toggleProceedButton() {
             const proceedButton = document.getElementById("proceedButton");
@@ -484,54 +486,45 @@
             proceedButton.style.cursor = acceptTerms.checked ? "pointer" : "not-allowed";
         }
 
-        // Redirect to booking form if terms are accepted
+        // Toggle the proceed button state based on the checkbox
+    function toggleProceedButton() {
+        const checkbox = document.getElementById('acceptTerms');
+        const proceedButton = document.getElementById('proceedButton');
+        
+        if (checkbox.checked) {
+            proceedButton.disabled = false;
+            proceedButton.style.backgroundColor = '#4CAF50';
+            proceedButton.style.cursor = 'pointer';
+        } else {
+            proceedButton.disabled = true;
+            proceedButton.style.backgroundColor = 'gray';
+            proceedButton.style.cursor = 'not-allowed';
+        }
+    }
+
+    // Close the modal and reset the checkbox and button state
+        function closeModal() {
+            const modal = document.getElementById('termsModal');
+            const checkbox = document.getElementById('acceptTerms');
+            const proceedButton = document.getElementById('proceedButton');
+
+            // Reset the checkbox
+            checkbox.checked = false;
+
+            // Reset the button state
+            proceedButton.disabled = true;
+            proceedButton.style.backgroundColor = 'gray';
+            proceedButton.style.cursor = 'not-allowed';
+
+            // Hide the modal
+            modal.style.display = 'none';
+        }
+
         function proceedToBooking() {
             if (document.getElementById("acceptTerms").checked) {
                 window.location.href = "/BookHere";
             }
         }
-
-    /* // FUNTION OF PROFILE ACCOUNT (Open Profile Modal)
-        function openProfileModal(event) {
-            event.preventDefault(); // Prevent the link from navigating
-            document.getElementById("ProfileModal").style.display = "block";
-        }
-        
-        // Open Setting Modal
-        function openSettingModal(event) {
-            event.preventDefault(); // Prevent the link from navigating
-            document.getElementById("SettingModal").style.display = "block";
-        }
-        
-        // Close Modal
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = "none";
-        }
-        
-        //
-        document.addEventListener('DOMContentLoaded', function() {
-        // Check if redirected after registration
-            if (window.location.search.includes('registered=true')) {
-                openModal('AccountSettingsModal');
-            }
-        });
-
-        // Function to open the modal
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'block';
-        }
-
-        // Function to close the modal
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        // Form submission handling for modal
-        document.getElementById('AccountSettingsForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Profile updated successfully!');
-            closeModal('AccountSettingsModal');
-        }); */
     </script>
 
     <script>
