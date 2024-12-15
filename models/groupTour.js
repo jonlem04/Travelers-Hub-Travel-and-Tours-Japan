@@ -47,13 +47,12 @@ const groupTourSchema = new mongoose.Schema({
     adult: { type: Number },
     child: { type: Number },
     infant: { type: Number },
-    sendOriginalDocuments : { type: Boolean, default: false }, //Added field
-    documentSubmitted : { type: Boolean, default: false }, //Added field
-    passportRecieved : { type: Boolean, default: false }, //Added field 
-    paymentAcknowledged : { type: Boolean, default: false }, //Added field
-    
-    travelInsurance : { type: Boolean, default: false }, 
-    additionalTip : { type: Boolean, default: false }, 
+    sendOriginalDocuments : { type: Boolean, default: false }, 
+    documentSubmitted : { type: Boolean, default: false }, 
+    passportRecieved : { type: Boolean, default: false },  
+    paymentAcknowledged : { type: Boolean, default: false }, 
+    insurance : { type: Boolean, default: false }, //Added fields
+    tip : { type: Boolean, default: false }, //Added fields
 
     passportID: {
         filename: { type: String },

@@ -13,7 +13,6 @@ const Requirements = require('../models/Requirements'); // Path to your Requirem
 const PackageContent = require('../models/PackageContent'); // Adjust path as needed
 const GroupTour = require('../models/groupTour');
 
-const upload = require('../routes/uploadMiddleware');
 const bookingController = require('../routes/bookingController'); 
 
 
@@ -23,7 +22,7 @@ const jwtSecret = process.env.JWT_SECRET || 'defaultFallbackSecret'; //JWT Secre
 // Multer setup for file uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadDir = path.join(__dirname, 'uploads/');
+        const uploadDir = path.join('uploads/');
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir);
         }
@@ -35,7 +34,8 @@ const storage = multer.diskStorage({
     }
 });
 
-//const upload = multer({ storage });
+// Initialize multer with only storage
+const upload = multer({ storage });
 
 const router = express.Router();
 

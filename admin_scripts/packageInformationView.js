@@ -23,7 +23,9 @@ async function fetchTourDetails() {
         document.getElementById('adultNumber').textContent = tour.adult || 0;
         document.getElementById('childNumber').textContent = tour.child || 0;
         document.getElementById('infantNumber').textContent = tour.infant || 0;
-        document.getElementById('inquiryMesage').textContent = tour.inquiryMessage || '-';
+        document.getElementById('inquiryMesage').textContent = tour.inquiryMessage || 'No inquiry message';
+        document.getElementById('insurance').textContent = tour.insurance ? 'Yes' : 'No';
+        document.getElementById('tip').textContent = tour.tip ? 'Yes' : 'No';
 
         // Populate primary traveler's files
         const primaryFiles = {

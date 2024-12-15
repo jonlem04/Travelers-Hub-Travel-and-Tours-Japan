@@ -71,6 +71,8 @@ exports.createBooking = async (req, res) => {
             adult: Number(adultNumber),
             child: Number(childNumber),
             infant: Number(infantNumber),
+            insurance: req.body.insurance === 'on', // Set true if checkbox is checked
+            tip: req.body.tip === 'on', // Set true if checkbox is checked
             passportID: mapFile(findFile('passport')),
             visaID: mapFile(findFile('visa')),
             validID: mapFile(findFile('validId')),
